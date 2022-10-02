@@ -1,0 +1,58 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.4'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id 'java'
+
+    id 'org.openapi.generator' version '5.3.0'
+}
+
+group = 'com'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+    implementation 'org.liquibase:liquibase-core:4.16.1'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'com.google.code.gson:gson:2.9.1'
+
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+    runtimeOnly 'mysql:mysql-connector-java'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+compileJava.dependsOn(tasks.openApiGenerate)
+
+def generatedSourcesDir = "${buildDir}/generated/openapi"
+openApiGenerate {
+    generatorName = "java"
+    inputSpec = "$projectDir/swagger.yml"
+    outputDir = generatedSourcesDir
+    modelPackage = "com.charter"
+
+    globalProperties = [
+            models: "",
+            modelDocs: "false",
+            modelTests: "false",
+            apis: "false",
+    ]
+    configOptions = [
+            serializationLibrary: "jackson",
+            enumPropertyNaming: "UPPERCASE",
+            dateLibrary: "java8-localdatetime"
+    ]
+}
+
+sourceSets.main.java.srcDir "${generatedSourcesDir}/src/main/java"

@@ -1,0 +1,324 @@
+openapi: 3.0.1
+info:
+  title: Charter
+  description: Charter API Documentation
+  version: "0.1"
+servers:
+  - url: //localhost:8081/
+tags:
+  - name: Customer
+    description: API
+  - name: Reward
+    description: API
+  - name: Transaction
+    description: API
+paths:
+  /customer/v1/{email}/totalreward:
+    get:
+      tags:
+        - Transaction
+      summary: Get total reward by email
+      operationId: getTotalRewardByEmail
+      parameters:
+        - in: path
+          name: email
+          description: email of the customer
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RewardResponse'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+  /customer/v1/{email}/monthlyreward:
+    get:
+      tags:
+        - Transaction
+      summary: Get monthly reward by email
+      operationId: getMonthlyRewardByEmail
+      parameters:
+        - in: path
+          name: email
+          description: email of the customer
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RewardResponse'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+
+  /customer/v1:
+    post:
+      tags:
+        - Customer
+      summary: Create a new customer
+      operationId: createNewCustomer
+      requestBody:
+        description: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerApi'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        201:
+          description: Created
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+
+  /customer/v1/{email}:
+    get:
+      tags:
+        - Customer
+      summary: Get a customer by their email
+      operationId: getCustomerByEmail
+      parameters:
+        - in: path
+          name: email
+          description: customer's email
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerApi'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+
+  /transaction/v1:
+    get:
+      tags:
+        - Transaction
+      summary: Get all transactions for a customer
+      operationId: getAllTransactions
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionResponse'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+    post:
+      tags:
+        - Transaction
+      summary: Add a new transaction on a customer
+      operationId: createTransaction
+      requestBody:
+        description: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        201:
+          description: Created
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+          
+
+  /transaction/v1/{uuid}:
+    get:
+      tags:
+        - Transaction
+      summary: Get transaction by its uuid
+      operationId: getTransactionByUuid
+      parameters:
+        - in: path
+          name: uuid
+          description: uuid of the transaction to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+
+    put:
+      tags:
+        - Transaction
+      summary: Update an existing transaction with a new transaction price
+      operationId: updateTransaction
+      parameters:
+        - in: path
+          name: uuid
+          description: uuid of the transaction to retrieve
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        500:
+          description: Internal Server Error
+
+    delete:
+      tags:
+        - Transaction
+      summary: Delete a transaction
+      operationId: deleteTransaction
+      parameters:
+        - name: uuid
+          in: path
+          schema:
+            type: string
+          required: true
+          description: transaction identifier
+      responses:
+        200:
+          description: OK
+          content: { }
+        201:
+          description: Created
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Forbidden
+          content: { }
+        404:
+          description: Not Found
+          content: { }
+
+
+components:
+  schemas:
+    RewardResponse:
+      type: object
+      properties:
+        amountOfPoints:
+          type: integer
+          description: The number of points granted to a customer
+          example: "123"
+    TransactionRequest:
+      type: object
+      properties:
+        customerEmail:
+          type: string
+          description: The number of points granted to a customer
+          example: "john@doe.com"
+        amount:
+          type: number
+          description: The number of points granted to a customer
+          example: "123"
+    TransactionResponse:
+      type: object
+      properties:
+        customerEmail:
+          type: string
+          description: The e-mail address of a customer
+          example: "john@doe.com"
+        amount:
+          type: number
+          description: The amount spent in a transaction
+          example: "123"
+        uuid:
+          type: string
+          description: The number of points granted to a customer
+          example: "sdsdasds"
+        creationDate:
+          type: string
+          format: date
+          description: |
+            The date of a transaction
+          example: "2022-09-23"
+    CustomerApi:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The e-mail address of a customer
+          example: "john@doe.com"
+        firstName:
+          type: string
+          description: First name of a customer
+          example: "John"
+        lastName:
+          type: string
+          description: Last name of a customer
+          example: "Doe"
+
