@@ -19,7 +19,7 @@ Besides, `customer` and `transaction` contain also:
 - a `repository` - jpa repository
 
 ### Build
-Code can be built by gradle:
+The code can be built by gradle:
 ```
 ./gradlew clean build
 ```
@@ -28,3 +28,6 @@ During the build Swagger/OpenAPI specification is used to generate request/respo
 classes.
 
 Gradle build includes compilation and tests.
+
+### Test data
+Test data is located in the `test-data` folder. It consists of customer and transaction data in the CSV format.
