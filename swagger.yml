@@ -217,7 +217,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransactionRequest'
+              $ref: '#/components/schemas/UpdateTransactionRequest'
         required: true
       responses:
         200:
@@ -281,6 +281,13 @@ components:
           type: string
           description: The number of points granted to a customer
           example: "john@doe.com"
+        amount:
+          type: number
+          description: The number of points granted to a customer
+          example: "123"
+    UpdateTransactionRequest:
+      type: object
+      properties:
         amount:
           type: number
           description: The number of points granted to a customer

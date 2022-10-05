@@ -52,13 +52,10 @@ class TransactionServiceTest {
     void shouldUpdateTransaction() {
         // given
         String email = "john@doe.com";
-        Transaction transaction = new Transaction();
-        transaction.setAmount(BigDecimal.valueOf(12));
         Customer customer = new Customer();
         customer.setEmail(email);
         customer.setFirstName("John");
         customer.setLastName("Doe");
-        transaction.setCustomer(customer);
 
         String uuid = UUID.randomUUID().toString();
         Transaction existingTransaction = new Transaction();
@@ -79,7 +76,7 @@ class TransactionServiceTest {
         when(transactionRepository.save(expectedTransaction)).thenReturn(expectedTransaction);
 
         // when
-        Transaction result = service.updateTransaction(uuid, transaction);
+        Transaction result = service.updateTransactionAmount(uuid, BigDecimal.valueOf(12));
 
         // then
         assertEquals(expectedTransaction, result);
@@ -88,20 +85,11 @@ class TransactionServiceTest {
     @Test
     void shouldThrowTransactionNotFoundException() {
         // given
-        String email = "john@doe.com";
-        Transaction transaction = new Transaction();
-        transaction.setAmount(BigDecimal.valueOf(12));
-        Customer customer = new Customer();
-        customer.setEmail(email);
-        customer.setFirstName("John");
-        customer.setLastName("Doe");
-        transaction.setCustomer(customer);
-
         String uuid = UUID.randomUUID().toString();
         when(transactionRepository.findByUuid(uuid)).thenReturn(null);
 
         // when + then
-        assertThrows(TransactionNotFoundException.class, () -> service.updateTransaction(uuid, transaction));
+        assertThrows(TransactionNotFoundException.class, () -> service.updateTransactionAmount(uuid, BigDecimal.valueOf(12)));
     }
 
     @Test

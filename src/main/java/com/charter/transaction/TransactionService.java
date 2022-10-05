@@ -3,6 +3,7 @@ package com.charter.transaction;
 import com.charter.exceptions.TransactionNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -28,14 +29,12 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public Transaction updateTransaction(String uuid, Transaction transaction) {
-        Transaction existingTransaction = transactionRepository.findByUuid(uuid);
-        if (existingTransaction == null) {
+    public Transaction updateTransactionAmount(String uuid, BigDecimal newAmount) {
+        Transaction transaction = transactionRepository.findByUuid(uuid);
+        if (transaction == null) {
             throw new TransactionNotFoundException(uuid);
         }
-        transaction.setId(existingTransaction.getId());
-        transaction.setCreationDate(existingTransaction.getCreationDate());
-        transaction.setUuid(uuid);
+        transaction.setAmount(newAmount);
         return transactionRepository.save(transaction);
     }
 

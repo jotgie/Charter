@@ -2,6 +2,7 @@ package com.charter.transaction;
 
 import com.charter.TransactionRequest;
 import com.charter.TransactionResponse;
+import com.charter.UpdateTransactionRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,7 +26,7 @@ public class TransactionController {
     }
 
     @PutMapping("/{uuid}")
-    public TransactionResponse updateTransaction(@PathVariable("uuid") String uuid, @RequestBody TransactionRequest request) {
+    public TransactionResponse updateTransaction(@PathVariable("uuid") String uuid, @RequestBody UpdateTransactionRequest request) {
         return transactionAdapter.updateTransaction(uuid, request);
     }
 

@@ -2,6 +2,7 @@ package com.charter.transaction;
 
 import com.charter.TransactionRequest;
 import com.charter.TransactionResponse;
+import com.charter.UpdateTransactionRequest;
 import com.charter.exceptions.ValidationException;
 import com.charter.customer.Customer;
 import org.junit.jupiter.api.Test;
@@ -81,21 +82,16 @@ class TransactionAdapterTest {
         Transaction transaction = new Transaction();
         transaction.setCustomer(customer);
         transaction.setAmount(BigDecimal.valueOf(12));
-
-        Transaction savedTransaction = new Transaction();
-        savedTransaction.setCustomer(customer);
-        savedTransaction.setAmount(BigDecimal.valueOf(12));
         String transactionUuid = UUID.randomUUID().toString();
-        savedTransaction.setUuid(transactionUuid);
+        transaction.setUuid(transactionUuid);
         LocalDate creationDate = LocalDate.now();
-        savedTransaction.setCreationDate(creationDate);
+        transaction.setCreationDate(creationDate);
 
-        when(transactionService.updateTransaction(transactionUuid, transaction)).thenReturn(savedTransaction);
-        TransactionRequest request = new TransactionRequest().amount(BigDecimal.valueOf(12)).customerEmail(email);
+        when(transactionService.updateTransactionAmount(transactionUuid, BigDecimal.valueOf(12))).thenReturn(transaction);
+        UpdateTransactionRequest request = new UpdateTransactionRequest().amount(BigDecimal.valueOf(12));
 
-        when(transactionMapper.apiToDomain(request)).thenReturn(transaction);
         TransactionResponse response = new TransactionResponse().amount(BigDecimal.valueOf(12)).creationDate(creationDate).uuid(transactionUuid).customerEmail(email);
-        when(transactionMapper.domainToApi(savedTransaction)).thenReturn(response);
+        when(transactionMapper.domainToApi(transaction)).thenReturn(response);
 
         // when
         TransactionResponse result = adapter.updateTransaction(transactionUuid, request);
