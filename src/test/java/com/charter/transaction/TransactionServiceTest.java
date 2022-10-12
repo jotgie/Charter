@@ -93,29 +93,6 @@ class TransactionServiceTest {
     }
 
     @Test
-    void shouldReturnMonthlyTransactions() {
-        // given
-        String email = "john@doe.com";
-        Transaction transaction = new Transaction();
-        transaction.setAmount(BigDecimal.valueOf(12));
-        Customer customer = new Customer();
-        customer.setEmail(email);
-        customer.setFirstName("John");
-        customer.setLastName("Doe");
-        transaction.setCustomer(customer);
-
-        LocalDate dateBefore1Month = LocalDate.now().minusMonths(1);
-        List<Transaction> transactions = Collections.singletonList(transaction);
-        when(transactionRepository.findAllByCustomerEmailAndCreationDateGreaterThan(email, dateBefore1Month)).thenReturn(transactions);
-
-        // when
-        List<Transaction> result = service.getMonthlyTransactionsByEmail(email);
-
-        // then
-        assertEquals(transactions, result);
-    }
-
-    @Test
     void shouldReturnAllTransactions() {
         // given
         String email = "john@doe.com";

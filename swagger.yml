@@ -13,7 +13,7 @@ tags:
   - name: Transaction
     description: API
 paths:
-  /customer/v1/{email}/totalreward:
+  /reward/v1/{email}/total:
     get:
       tags:
         - Transaction
@@ -32,14 +32,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RewardResponse'
+                $ref: '#/components/schemas/TotalRewardResponse'
         401:
           description: Unauthorized
         403:
           description: Forbidden
         404:
           description: Not Found
-  /customer/v1/{email}/monthlyreward:
+  /reward/v1/{email}/monthly:
     get:
       tags:
         - Transaction
@@ -267,19 +267,30 @@ paths:
 
 components:
   schemas:
-    RewardResponse:
+    TotalRewardResponse:
       type: object
       properties:
         amountOfPoints:
           type: integer
           description: The number of points granted to a customer
           example: "123"
+    RewardResponse:
+      type: object
+      properties:
+        default:
+          $ref: '#/components/schemas/Points'
+      additionalProperties:
+        $ref: '#/components/schemas/Points'
+    Points:
+      type: integer
+      description: "Number of points granted"
+      example: 123
     TransactionRequest:
       type: object
       properties:
         customerEmail:
           type: string
-          description: The number of points granted to a customer
+          description: The email of a customer
           example: "john@doe.com"
         amount:
           type: number

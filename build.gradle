@@ -23,9 +23,9 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'com.google.code.gson:gson:2.9.1'
+    implementation 'com.h2database:h2:2.1.214'
 
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
-    runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
@@ -41,7 +41,7 @@ openApiGenerate {
     inputSpec = "$projectDir/swagger.yml"
     outputDir = generatedSourcesDir
     modelPackage = "com.charter"
-
+    instantiationTypes = [map: "java.util.LinkedHashMap"]
     globalProperties = [
             models: "",
             modelDocs: "false",

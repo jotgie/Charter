@@ -4,6 +4,7 @@ import com.charter.TransactionRequest;
 import com.charter.TransactionResponse;
 import com.charter.customer.Customer;
 import com.charter.customer.CustomerRepository;
+import com.charter.exceptions.CustomerNotFoundException;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -27,7 +28,11 @@ public abstract class TransactionMapper {
 
     @AfterMapping
     void enrichDomainWithCustomer(TransactionRequest request, @MappingTarget Transaction transaction) {
-        Customer customer = customerRepository.findByEmail(request.getCustomerEmail());
+        String customerEmail = request.getCustomerEmail();
+        Customer customer = customerRepository.findByEmail(customerEmail);
+        if (customer == null) {
+            throw new CustomerNotFoundException(customerEmail);
+        }
         transaction.setCustomer(customer);
     }
 

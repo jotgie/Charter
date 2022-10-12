@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,11 +17,6 @@ public class TransactionService {
 
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
-    }
-
-    public List<Transaction> getMonthlyTransactionsByEmail(String email) {
-        LocalDate dateBefore1Month = LocalDate.now().minusMonths(1);
-        return transactionRepository.findAllByCustomerEmailAndCreationDateGreaterThan(email, dateBefore1Month);
     }
 
     public List<Transaction> getAllTransactionsByEmail(String email) {

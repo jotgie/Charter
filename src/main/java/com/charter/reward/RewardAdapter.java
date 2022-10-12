@@ -1,6 +1,7 @@
 package com.charter.reward;
 
 import com.charter.RewardResponse;
+import com.charter.TotalRewardResponse;
 import com.charter.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +18,14 @@ public class RewardAdapter {
 
     RewardResponse calculateMonthlyReward(String email) {
         validateInput(email);
-        return new RewardResponse().amountOfPoints(service.calculateMonthlyReward(email));
+        RewardResponse rewardResponse = new RewardResponse();
+        rewardResponse.putAll(service.calculateMonthlyReward(email));
+        return rewardResponse;
     }
 
-    RewardResponse calculateTotalReward(String email) {
+    TotalRewardResponse calculateTotalReward(String email) {
         validateInput(email);
-        return new RewardResponse().amountOfPoints(service.calculateTotalReward(email));
+        return new TotalRewardResponse().amountOfPoints(service.calculateTotalReward(email));
     }
 
     private void validateInput(String email) {
